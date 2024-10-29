@@ -1,21 +1,26 @@
 package api
 
 import (
+	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type api struct {
 	address string
-	r       *http.ServeMux
+	router  *mux.Router
 }
 
-func New(address string, r *http.ServeMux) *api {
+func New(address string, router *mux.Router) *api {
 	return &api{
 		address: address,
-		r:       r,
+		router:  router,
 	}
 }
 
-func (api *api) ListenAndServe() error {
-	return http.ListenAndServe(api.address, api.r)
+func (api *api) ListenAndServe() {
+	if err := http.ListenAndServe(api.address, api.router); err != nil {
+		log.Fatal(err.Error())
+	}
 }

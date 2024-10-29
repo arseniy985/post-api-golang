@@ -1,18 +1,21 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
-	"example.com/first/api"
+	"example.com/first/cmd/app/api"
+	"example.com/first/cmd/app/internal/database"
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	api := api.New("localhost:8080", http.NewServeMux())
+	api := api.New("localhost:8080", mux.NewRouter())
+	db := database.NewDatabase(
+		"mysql", "localhost", "goDatabase",
+		"root", "root", 3306,
+	)
+	db.OpenConnection()
+	defer db.CloseConnection()
 
 	api.AddRoutes()
 
-	if err := api.ListenAndServe(); err != nil {
-		log.Fatal(err.Error())
-	}
+	api.ListenAndServe()
 }
