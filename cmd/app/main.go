@@ -9,7 +9,7 @@ import (
 func main() {
 	api := api.New("localhost:8080", mux.NewRouter())
 	db := database.NewDatabase(
-		"mysql", "localhost", "goDatabase",
+		"mysql", "localhost", "foFirst",
 		"root", "root", 3306,
 	)
 	db.OpenConnection()

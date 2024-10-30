@@ -30,7 +30,7 @@ func NewDatabase(dialect, host, name, user, password string, port int) *Database
 }
 
 func (database *Database) OpenConnection() error {
-	db, err := sql.Open(database.dialect, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", database.user, database.password, database.host, database.port, database.name))
+	db, err := sql.Open(database.dialect, fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", database.user, database.password, database.host, database.port, database.name))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -39,8 +39,8 @@ func (database *Database) OpenConnection() error {
 }
 
 func (database *Database) CloseConnection() error {
-	if err := database.db.Close(); err != nil {
-		return err.Error()
+	if err := DB.Close(); err != nil {
+		log.Fatal(err.Error())
 	}
 	return nil
 }

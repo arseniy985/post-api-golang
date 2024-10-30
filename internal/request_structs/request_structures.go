@@ -1,7 +1,6 @@
-package database
+package request_structs
 
-type Post struct {
-	ID      uint   `json:"id"`
+type StorePostRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }

@@ -12,7 +12,18 @@ func GetAllPosts() []Post {
 	var posts []Post
 	for rows.Next() {
 		var post Post
+		rows.Scan(&post.ID, &post.Title, &post.Content)
 		posts = append(posts, post)
 	}
+	defer rows.Close()
 	return posts
+}
+
+func StorePost(title, content string) error {
+	sql, _ := DB.Prepare("INSERT INTO posts (title, content) VALUES (?, ?)")
+	_, execErr := sql.Exec(title, content)
+	if execErr != nil {
+		return execErr
+	}
+	return nil
 }
