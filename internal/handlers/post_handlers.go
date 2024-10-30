@@ -17,7 +17,7 @@ func GetPostsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(services.GetAllPosts())
 }
 func StorePostHandler(w http.ResponseWriter, r *http.Request) {
-	var postData request_structs.StorePostRequest
+	var postData request_structs.PostRequest
 	body, readErr := io.ReadAll(r.Body)
 	if readErr != nil {
 		http.Error(w, "", http.StatusBadRequest)
@@ -37,6 +37,27 @@ func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Id must be integer", http.StatusBadRequest)
 	}
 	if !services.DeletePost(id) {
+		http.Error(w, "", http.StatusInternalServerError)
+	}
+	w.WriteHeader(200)
+}
+func UpdatePostHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi((mux.Vars(r))["id"])
+	if err != nil {
+		http.Error(w, "Id must be integer", http.StatusBadRequest)
+	}
+
+	var postData request_structs.PostRequest
+	body, readErr := io.ReadAll(r.Body)
+	if readErr != nil {
+		http.Error(w, "", http.StatusBadRequest)
+	}
+	defer r.Body.Close()
+	if err := json.Unmarshal(body, &postData); err != nil {
+		http.Error(w, "", http.StatusBadRequest)
+	}
+
+	if !services.UpdatePost(id, &postData) {
 		http.Error(w, "", http.StatusInternalServerError)
 	}
 	w.WriteHeader(200)

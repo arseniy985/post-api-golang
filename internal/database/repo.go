@@ -1,6 +1,7 @@
 package database
 
 import (
+	"example.com/first/cmd/app/internal/request_structs"
 	"log"
 )
 
@@ -31,6 +32,15 @@ func StorePost(title, content string) error {
 func DeletePost(postId int) error {
 	sql, _ := DB.Prepare("DELETE FROM posts WHERE id = ?")
 	_, err := sql.Exec(postId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdatePost(postId int, postData *request_structs.PostRequest) error {
+	sql, _ := DB.Prepare("UPDATE posts SET title = ?, content = ? WHERE id = ?")
+	_, err := sql.Exec(postData.Title, postData.Content, postId)
 	if err != nil {
 		return err
 	}

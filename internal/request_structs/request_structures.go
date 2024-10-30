@@ -1,6 +1,6 @@
 package request_structs
 
-type StorePostRequest struct {
+type PostRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }

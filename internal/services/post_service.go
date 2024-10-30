@@ -12,7 +12,7 @@ func GetAllPosts() []byte {
 	return posts
 }
 
-func StorePost(postData *request_structs.StorePostRequest) bool {
+func StorePost(postData *request_structs.PostRequest) bool {
 	if success := database.ValidatePostData(postData.Title, postData.Content); !success {
 		return false
 	}
@@ -24,4 +24,12 @@ func DeletePost(postId int) bool {
 	if err := database.DeletePost(postId); err != nil {
 		return false
 	}
+	return true
+}
+
+func UpdatePost(postId int, postData *request_structs.PostRequest) bool {
+	if err := database.UpdatePost(postId, postData); err != nil {
+		return false
+	}
+	return true
 }
