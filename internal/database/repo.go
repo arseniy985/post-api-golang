@@ -27,3 +27,12 @@ func StorePost(title, content string) error {
 	}
 	return nil
 }
+
+func DeletePost(postId int) error {
+	sql, _ := DB.Prepare("DELETE FROM posts WHERE id = ?")
+	_, err := sql.Exec(postId)
+	if err != nil {
+		return err
+	}
+	return nil
+}

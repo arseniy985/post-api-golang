@@ -20,6 +20,8 @@ func StorePost(postData *request_structs.StorePostRequest) bool {
 	return true
 }
 
-func DeletePost(postId int) {
-
+func DeletePost(postId int) bool {
+	if err := database.DeletePost(postId); err != nil {
+		return false
+	}
 }
