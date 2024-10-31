@@ -29,13 +29,20 @@ func StorePost(title, content string) error {
 	return nil
 }
 
-func DeletePost(postId int) error {
+func DeletePost(postId int) (bool, error) {
 	sql, _ := DB.Prepare("DELETE FROM posts WHERE id = ?")
-	_, err := sql.Exec(postId)
+	result, err := sql.Exec(postId)
 	if err != nil {
-		return err
+		return false, err
 	}
-	return nil
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return false, err
+	} else if rowsAffected == 0 {
+		return false, nil
+	}
+
+	return true, nil
 }
 
 func UpdatePost(postId int, postData *request_structs.PostRequest) error {

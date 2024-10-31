@@ -20,11 +20,14 @@ func StorePost(postData *request_structs.PostRequest) bool {
 	return true
 }
 
-func DeletePost(postId int) bool {
-	if err := database.DeletePost(postId); err != nil {
-		return false
+func DeletePost(postId int) (bool, error) {
+	res, err := database.DeletePost(postId)
+	if err != nil {
+		return false, err
+	} else if res == false && err == nil {
+		return false, nil
 	}
-	return true
+	return true, nil
 }
 
 func UpdatePost(postId int, postData *request_structs.PostRequest) bool {
